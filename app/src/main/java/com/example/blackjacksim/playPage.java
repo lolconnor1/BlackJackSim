@@ -39,8 +39,8 @@ public class playPage extends AppCompatActivity {
 
 
     public void play(){
-        String dealerHand = "";
-        String playerHand = "";
+        final String[] dealerHand = {""};
+        final String[] playerHand = {""};
         ArrayList<Card> dealer = new ArrayList<Card>();
         ArrayList<Card> player = new ArrayList<Card>();
 
@@ -52,20 +52,32 @@ public class playPage extends AppCompatActivity {
         setPlayerHandValue(0);
 
         for(int i=0;i<dealer.size();i++){
-            dealerHand += dealer.get(i).getCardNum() + " ";
+            dealerHand[0] += dealer.get(i).getCardNum() + " ";
+            dealerHandValue += dealer.get(i).getCardValue();
         }
         for(int i=0;i<player.size();i++){
-            playerHand += player.get(i).getCardNum() + " ";
+            playerHand[0] += player.get(i).getCardNum() + " ";
+            playerHandValue += player.get(i).getCardValue();
         }
 
-        dealerHandView.setText(dealerHand);
-        playerHandView.setText(playerHand);
+        dealerHandView.setText(dealerHand[0]);
+        playerHandView.setText(playerHand[0]);
 
-        
+        hit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Card c = new Card();
+                playerHandValue += c.getCardValue();
+                playerHand[0] += c.getCardNum() + " ";
+
+                playerHandView.setText(playerHand[0]);
+            }
+        });
 
 
 
     }
+
     public void setDealerHandValue(int n){
         dealerHandValue = n;
     }
