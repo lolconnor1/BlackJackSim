@@ -7,10 +7,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 public class playPage extends AppCompatActivity {
 
     Button hit, stand, play;
-    TextView dealerHand, playerHand;
+    TextView dealerHandView, playerHandView;
+
+    int dealerHandValue = 0;
+    int playerHandValue = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,6 +23,10 @@ public class playPage extends AppCompatActivity {
         setContentView(R.layout.activity_play_page);
 
         play = (Button) findViewById(R.id.button4);
+        hit = (Button) findViewById(R.id.button2);
+        stand = (Button) findViewById(R.id.button3);
+        dealerHandView = (TextView) findViewById(R.id.textView4);
+        playerHandView = (TextView) findViewById(R.id.textView5);
 
         play.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -27,32 +36,40 @@ public class playPage extends AppCompatActivity {
         });
     }
 
-    public String getRandomCard(){
-        int cardid = getRandomNumber(1, 13);
-        String card = "";
-        if(cardid == 2 ||cardid == 3 ||cardid == 4 ||cardid == 5 ||cardid == 6 ||cardid == 7 ||cardid == 8 ||cardid == 9 ||cardid == 10){
-            card = Integer.toString(cardid);
-        }
-        else if (cardid == 11){
-            card = "J";
-        }
-        else if (cardid == 12){
-            card = "Q";
-        }
-        else if (cardid == 13){
-            card = "K";
-        }
-        else if (cardid == 1){
-            card = "A";
-        }
-        return card;
-    }
 
-    public int getRandomNumber(int min, int max) {
-        return (int) ((Math.random() * (max - min)) + min);
-    }
 
     public void play(){
+        String dealerHand = "";
+        String playerHand = "";
+        ArrayList<Card> dealer = new ArrayList<Card>();
+        ArrayList<Card> player = new ArrayList<Card>();
 
+        player.add(new Card());
+        player.add(new Card());
+        dealer.add(new Card());
+
+        setDealerHandValue(0);
+        setPlayerHandValue(0);
+
+        for(int i=0;i<dealer.size();i++){
+            dealerHand += dealer.get(i).getCardNum() + " ";
+        }
+        for(int i=0;i<player.size();i++){
+            playerHand += player.get(i).getCardNum() + " ";
+        }
+
+        dealerHandView.setText(dealerHand);
+        playerHandView.setText(playerHand);
+
+        
+
+
+
+    }
+    public void setDealerHandValue(int n){
+        dealerHandValue = n;
+    }
+    public void setPlayerHandValue(int n){
+        playerHandValue = n;
     }
 }
