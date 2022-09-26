@@ -44,6 +44,9 @@ public class Card{
         else if (s.equals("J") || s.equals("Q") ||s.equals("K")){
             return 10;
         }
+        else if (s.equals("A")){
+            return 11;
+        }
 
 
         return num;

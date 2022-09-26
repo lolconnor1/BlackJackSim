@@ -41,6 +41,9 @@ public class playPage extends AppCompatActivity {
     public void play(){
         final String[] dealerHand = {""};
         final String[] playerHand = {""};
+
+        final boolean[] done = {false};
+
         ArrayList<Card> dealer = new ArrayList<Card>();
         ArrayList<Card> player = new ArrayList<Card>();
 
@@ -48,40 +51,105 @@ public class playPage extends AppCompatActivity {
         player.add(new Card());
         dealer.add(new Card());
 
-        setDealerHandValue(0);
-        setPlayerHandValue(0);
-
         for(int i=0;i<dealer.size();i++){
             dealerHand[0] += dealer.get(i).getCardNum() + " ";
-            dealerHandValue += dealer.get(i).getCardValue();
         }
         for(int i=0;i<player.size();i++){
             playerHand[0] += player.get(i).getCardNum() + " ";
-            playerHandValue += player.get(i).getCardValue();
         }
 
         dealerHandView.setText(dealerHand[0]);
         playerHandView.setText(playerHand[0]);
 
+
         hit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Card c = new Card();
-                playerHandValue += c.getCardValue();
-                playerHand[0] += c.getCardNum() + " ";
 
-                playerHandView.setText(playerHand[0]);
+                if(!done[0]) {
+                    Card c = new Card();
+
+                    playerHand[0] += c.getCardNum() + " ";
+
+                    playerHandView.setText(playerHand[0]);
+
+                    if (handTotal(player) > 21) {
+                        //lose, bust
+                        done[0] = true;
+
+                    }
+                    else if (handTotal(player) == 21) {
+
+                        done[0] = true;
+                        standing(dealer);
+                        for (int i = 1; i < dealer.size(); i++) {
+                            dealerHand[0] += dealer.get(i).getCardNum() + " ";
+                        }
+                        dealerHandView.setText(dealerHand[0]);
+
+                        if (handTotal(player) == handTotal(dealer)) {
+                            //push
+
+                        } else {
+                            //win
+
+                        }
+                    }
+                }
+
+            }
+        });
+
+        stand.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!done[0]) {
+                    standing(dealer);
+                    for (int i = 1; i < dealer.size(); i++) {
+                        dealerHand[0] += dealer.get(i).getCardNum() + " ";
+                    }
+                    dealerHandView.setText(dealerHand[0]);
+
+                    if (handTotal(dealer) > 21) {
+                        //win, dealer bust
+                        done[0] = true;
+                    } else if (handTotal(player) > handTotal(dealer)) {
+                        //win
+                        done[0] = true;
+                    } else {
+                        //lose
+                        done[0] = true;
+                    }
+                }
+
             }
         });
 
 
-
     }
 
-    public void setDealerHandValue(int n){
-        dealerHandValue = n;
+    public int handTotal(ArrayList<Card> hand){
+        int num = 0;
+        int aceCount = 0;
+        for(int i = 0; i<hand.size();i++){
+            num += hand.get(i).getCardValue();
+            if(hand.get(i).getCardValue() == 11){
+                aceCount++;
+            }
+        }
+        for(int j = 0; j < aceCount; j++){
+            if(num > 21){
+                num -= 10;
+            }
+        }
+        return num;
     }
-    public void setPlayerHandValue(int n){
-        playerHandValue = n;
+
+
+    public void standing(ArrayList<Card> dealerHand){
+        while(handTotal(dealerHand) < 17){
+            dealerHand.add(new Card());
+        }
+
     }
 }
