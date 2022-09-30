@@ -69,6 +69,8 @@ public class playPage extends AppCompatActivity {
                 if(!done[0]) {
                     Card c = new Card();
 
+                    player.add(c);
+
                     playerHand[0] += c.getCardNum() + " ";
 
                     playerHandView.setText(playerHand[0]);
