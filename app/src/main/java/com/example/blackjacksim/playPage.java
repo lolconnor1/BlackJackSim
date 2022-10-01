@@ -12,10 +12,8 @@ import java.util.ArrayList;
 public class playPage extends AppCompatActivity {
 
     Button hit, stand, play;
-    TextView dealerHandView, playerHandView;
+    TextView dealerHandView, playerHandView, outcome, playerTotal, dealerTotal;
 
-    int dealerHandValue = 0;
-    int playerHandValue = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +25,9 @@ public class playPage extends AppCompatActivity {
         stand = (Button) findViewById(R.id.button3);
         dealerHandView = (TextView) findViewById(R.id.textView4);
         playerHandView = (TextView) findViewById(R.id.textView5);
+        outcome = (TextView) findViewById(R.id.textView6);
+        playerTotal = (TextView) findViewById(R.id.textView8);
+        dealerTotal = (TextView) findViewById(R.id.textView7);
 
         play.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -41,6 +42,7 @@ public class playPage extends AppCompatActivity {
     public void play(){
         final String[] dealerHand = {""};
         final String[] playerHand = {""};
+
 
         final boolean[] done = {false};
 
@@ -60,6 +62,9 @@ public class playPage extends AppCompatActivity {
 
         dealerHandView.setText(dealerHand[0]);
         playerHandView.setText(playerHand[0]);
+        playerTotal.setText("" +handTotal(player));
+        dealerTotal.setText("" +handTotal(dealer));
+        outcome.setText("GAME IN PROGRESS");
 
 
         hit.setOnClickListener(new View.OnClickListener() {
@@ -75,8 +80,11 @@ public class playPage extends AppCompatActivity {
 
                     playerHandView.setText(playerHand[0]);
 
+                    playerTotal.setText("" + handTotal(player));
+
                     if (handTotal(player) > 21) {
                         //lose, bust
+                        outcome.setText("LOSE: bust");
                         done[0] = true;
 
                     }
@@ -91,10 +99,10 @@ public class playPage extends AppCompatActivity {
 
                         if (handTotal(player) == handTotal(dealer)) {
                             //push
-
+                            outcome.setText("PUSH");
                         } else {
                             //win
-
+                            outcome.setText("WIN: blackjack");
                         }
                     }
                 }
@@ -111,17 +119,26 @@ public class playPage extends AppCompatActivity {
                         dealerHand[0] += dealer.get(i).getCardNum() + " ";
                     }
                     dealerHandView.setText(dealerHand[0]);
+                    dealerTotal.setText("" + handTotal(dealer));
 
                     if (handTotal(dealer) > 21) {
                         //win, dealer bust
+                        outcome.setText("WIN: dealer bust");
                         done[0] = true;
                     } else if (handTotal(player) > handTotal(dealer)) {
                         //win
-                        done[0] = true;
+
+                        outcome.setText("WIN: better hand");
+                    } else if (handTotal(player) == handTotal(dealer)){
+                        // push
+                        outcome.setText("PUSH");
+
                     } else {
                         //lose
-                        done[0] = true;
+                        outcome.setText("LOSE: worse hand");
+
                     }
+                    done[0] = true;
                 }
 
             }
