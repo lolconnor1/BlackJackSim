@@ -52,10 +52,13 @@ public class playPage extends AppCompatActivity {
         player.add(new Card());
         player.add(new Card());
         dealer.add(new Card());
+        dealer.add(new Card());
 
-        for(int i=0;i<dealer.size();i++){
-            dealerHand[0] += dealer.get(i).getCardNum() + " ";
-        }
+
+
+
+        dealerHand[0] += "? " +dealer.get(1).getCardNum() + " ";
+
         for(int i=0;i<player.size();i++){
             playerHand[0] += player.get(i).getCardNum() + " ";
         }
@@ -63,8 +66,43 @@ public class playPage extends AppCompatActivity {
         dealerHandView.setText(dealerHand[0]);
         playerHandView.setText(playerHand[0]);
         playerTotal.setText("" +handTotal(player));
-        dealerTotal.setText("" +handTotal(dealer));
+        dealerTotal.setText("" +(handTotal(dealer) - dealer.get(0).getCardValue()));
         outcome.setText("GAME IN PROGRESS");
+
+
+        if(dealer.get(1).getCardValue() == 10 || dealer.get(1).getCardValue() == 11){
+            //offer insurance
+            if(handTotal(dealer) == 21){
+                dealerHand[0] = "";
+                for (int i = 0; i < dealer.size(); i++) {
+                    dealerHand[0] += dealer.get(i).getCardNum() + " ";
+                }
+                dealerHandView.setText(dealerHand[0]);
+                dealerTotal.setText("" + handTotal(dealer));
+
+                if(handTotal(player) == 21) {
+                    outcome.setText("PUSH");
+                }
+                else{
+                    outcome.setText("LOSE: dealer natural");
+
+                }
+                done[0] = true;
+            }
+        }
+        else if(handTotal(player) == 21 && handTotal(dealer) < 21){
+
+            dealerHand[0] = "";
+            for (int i = 0; i < dealer.size(); i++) {
+                dealerHand[0] += dealer.get(i).getCardNum() + " ";
+            }
+            dealerHandView.setText(dealerHand[0]);
+
+            dealerTotal.setText("" +handTotal(dealer));
+
+            outcome.setText("WIN: natural");
+            done[0] = true;
+        }
 
 
         hit.setOnClickListener(new View.OnClickListener() {
@@ -92,10 +130,13 @@ public class playPage extends AppCompatActivity {
 
                         done[0] = true;
                         standing(dealer);
-                        for (int i = 1; i < dealer.size(); i++) {
+
+                        dealerHand[0] = "";
+                        for (int i = 0; i < dealer.size(); i++) {
                             dealerHand[0] += dealer.get(i).getCardNum() + " ";
                         }
                         dealerHandView.setText(dealerHand[0]);
+                        dealerTotal.setText("" +handTotal(dealer));
 
                         if (handTotal(player) == handTotal(dealer)) {
                             //push
@@ -115,7 +156,8 @@ public class playPage extends AppCompatActivity {
             public void onClick(View view) {
                 if(!done[0]) {
                     standing(dealer);
-                    for (int i = 1; i < dealer.size(); i++) {
+                    dealerHand[0] = "";
+                    for (int i = 0; i < dealer.size(); i++) {
                         dealerHand[0] += dealer.get(i).getCardNum() + " ";
                     }
                     dealerHandView.setText(dealerHand[0]);
