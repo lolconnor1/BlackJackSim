@@ -10,6 +10,10 @@ public class Card{
         cardNum = getRandomCard();
         cardValue = getCardValue(cardNum);
     }
+    public Card(int num, String val){
+        cardNum = val;
+        cardValue = getCardValue(cardNum);
+    }
 
     public String getRandomCard(){
         int cardid = getRandomNumber(1, 13);
